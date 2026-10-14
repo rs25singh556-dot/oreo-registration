@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>OREO Community — Demo</title>
+<style>
+:root{--blue:#173f8a;--blue2:#2d65b7;--bg:#f2f6ff;--ink:#17243b}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);font:15px Arial,sans-serif;color:var(--ink)}
+header{background:linear-gradient(120deg,#102d62,#2865bd);color:#fff;padding:25px 18px;text-align:center}
+.logo{display:inline-grid;place-items:center;width:76px;height:76px;border:4px solid white;border-radius:50%;font-weight:900;font-size:20px;background:#172c61;box-shadow:inset 0 0 0 3px #9cb9f0}
+header h1{margin:12px 0 5px}header p{margin:0;color:#e7efff}
+main{max-width:760px;margin:20px auto;padding:0 14px}.notice{background:#fff4d9;border:1px solid #f1d28a;padding:12px;border-radius:12px;font-size:13px;line-height:1.5}
+.card{background:white;border:1px solid #e0e8f5;border-radius:16px;padding:20px;margin:14px 0;box-shadow:0 8px 25px #102d620b}
+.tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}.tabs button{flex:1;min-width:100px}
+button{border:0;border-radius:10px;background:var(--blue);color:white;padding:12px 14px;font-weight:700;cursor:pointer}
+button.secondary{background:#e8effb;color:var(--blue)}label{display:block;font-weight:700;font-size:13px;margin:13px 0 6px}
+input{width:100%;padding:12px;border:1px solid #ced9eb;border-radius:9px;font-size:15px}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px}.stat{background:#f2f6ff;padding:14px;border-radius:12px}.stat strong{display:block;font-size:23px;color:var(--blue);margin-top:5px}
+.hidden{display:none}.muted{font-size:12px;color:#68778f;line-height:1.5}.row{display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+footer{text-align:center;padding:18px;color:#68778f;font-size:12px}
+</style>
+</head>
+<body>
+<header><div class="logo">OREO</div><h1>OREO Community</h1><p>Unofficial registration-page concept</p></header>
+<main>
+<div class="notice"><b>Prototype only:</b> This is a visual front-end demo. It does not create real accounts, verify phone numbers, save passwords, or provide a secure admin panel. Do not enter real personal information. This is not an official Oreo / Mondelēz website.</div>
+<section class="card" id="auth">
+<div class="tabs"><button id="regTab">Register</button><button class="secondary" id="loginTab">Login</button></div>
+<form id="regForm">
+<h2>Create demo profile</h2>
+<label for="name">Name</label><input id="name" placeholder="Demo name" required maxlength="60">
+<label for="phone">Mobile number</label><input id="phone" inputmode="numeric" placeholder="Demo mobile number" required pattern="[0-9]{10}" maxlength="10">
+<label for="password">Password</label><input id="password" type="password" placeholder="Demo password (not saved)" required minlength="6">
+<label for="referral">Referral code (optional)</label><input id="referral" placeholder="Enter demo referral code" maxlength="30">
+<p class="muted">This demo will only use the details temporarily in this page session. They are not sent to a server or stored.</p>
+<button type="submit">Preview dashboard</button>
+</form>
+<form id="loginForm" class="hidden">
+<h2>Demo login</h2><label for="loginPhone">Mobile number</label><input id="loginPhone" inputmode="numeric" placeholder="Any 10-digit demo number" pattern="[0-9]{10}" maxlength="10" required>
+<label for="loginPassword">Password</label><input id="loginPassword" type="password" placeholder="Demo password" required>
+<p class="muted">Login is simulated; no account authentication is performed.</p><button type="submit">Open demo dashboard</button>
+</form>
+</section>
+<section class="card hidden" id="dashboard">
+<div class="row"><h2>Dashboard</h2><button class="secondary" id="logout">Log out</button></div>
+<p>Welcome, <b id="userName">Demo User</b>!</p>
+<div class="grid"><div class="stat">Your referral code<strong id="userCode">OREO-DEMO</strong></div><div class="stat">Joined users<strong>0</strong></div><div class="stat">Account status<strong>Demo</strong></div></div>
+<h3>Referral details</h3><p class="muted">A real referral system needs a backend database to track users and referral relationships securely.</p>
+<button class="secondary" id="adminToggle">Preview admin panel</button>
+<div id="admin" class="hidden"><h3>Admin panel preview</h3><p class="muted">Sample only: no real user records, permissions, or account controls are connected. A production admin panel must be protected by server-side role checks.</p><div class="grid"><div class="stat">Registered users<strong>0</strong></div><div class="stat">Referral joins<strong>0</strong></div></div></div>
+</section>
+</main>
+<footer>Unofficial demo concept · Not affiliated with Oreo or Mondelēz</footer>
+<script>
+const $=id=>document.getElementById(id);
+$('regTab').onclick=()=>{ $('regForm').classList.remove('hidden');$('loginForm').classList.add('hidden');$('regTab').classList.remove('secondary');$('loginTab').classList.add('secondary');};
+$('loginTab').onclick=()=>{ $('loginForm').classList.remove('hidden');$('regForm').classList.add('hidden');$('loginTab').classList.remove('secondary');$('regTab').classList.add('secondary');};
+function showDashboard(name,phone){$('userName').textContent=name||'Demo User';$('userCode').textContent='OREO-'+(phone||'DEMO').slice(-4).toUpperCase();$('auth').classList.add('hidden');$('dashboard').classList.remove('hidden');}
+$('regForm').onsubmit=e=>{e.preventDefault();showDashboard($('name').value,$('phone').value);};
+$('loginForm').onsubmit=e=>{e.preventDefault();showDashboard('Demo User',$('loginPhone').value);};
+$('logout').onclick=()=>{$('dashboard').classList.add('hidden');$('auth').classList.remove('hidden');$('regForm').reset();$('loginForm').reset();};
+$('adminToggle').onclick=()=>{$('admin').classList.toggle('hidden');};
+</script>
+</body>
+</html>
